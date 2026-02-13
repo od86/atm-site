@@ -3,119 +3,120 @@
   margin: 0;
 }
 
-section.hidden { 
-  display: none; 
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
 }
 
-.title {
+section.hidden {
+  display: none;
+}
+
+.log-in-section {
   width: 100%;
-  position: fixed;
-  text-align: center;
-  color: white;
+  height: 100%;
+  display: flex;
+  /* flex-wrap: wrap; */
+  background-color: rgb(244, 244, 244);
+}
 
-  padding: 16px;
+.log-in-items {
+  flex: 1;
   display: flex;
   flex-direction: column;
-}
-
-.title > h1 {
-  font-family: "Fenix", serif;
-  font-weight: bolder;
-  font-size: 5rem;
-  color: #e5e5e5;
-}
-
-.log-in {
-  width: 100vw;
-  height: 100vh;
-  background-color: #141414;
-  background-image: url('background/simple.jpg');
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
+  margin-top: 128px;
 }
 
-.log-in > input {
-  padding: 16px 24px;
-  width: clamp(320px, 5vw, 900px);
-  width: 600px;
-  border-radius: 30px;
-  background-color: black;
-  color: white;
-  font-size: clamp(1rem, 5vw, 1.5rem);
-  border: none;
+.log-in-items > p {
+  max-width: 640px;
+  padding: 0px 64px;
+  font-size: 1.2rem;
+  font-family: cursive;
 }
 
-.log-in > input:focus {
-  outline: none;
-  border: 1px solid #fca311;
-}
-
-#log-in-btn {
-  padding: 8px 32px;
-  border-radius: 10px;
-  font-size: clamp(1rem, 5vw, 1.2rem);
-  border: none;
-  background-color: black;
-  color: #fca311;
-  box-shadow: 2px 2px #fca311;
-}
-
-#log-in-btn:hover {
-  box-shadow: none;
-  box-shadow: 1px 1px rgb(26, 26, 26);
-}
-
-.homepage {
-  background-color: black;
-  background-image: url('background/simple2.jpg');
-  width: 100vw;
-  height: 100vh;
-  background-position: center;
-  background-size: cover;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.homepage > button {
-  padding: 16px 32px;
-  font-size: clamp(1.5rem, 5vw, 1.8rem);
-  display: flex;
-  align-items: center;
-  border: 1px solid #fca311;
-  gap: 16px;
-  width: 400px;
-  background-color: black;
-  color: white;
-  border-radius: 25px;
-  font-weight: bold;
-  font-family: 'Courier New', Courier, monospace;
+.log-in-items > h1 {
+  padding: 0px 64px;
+  font-size: 4rem;
   letter-spacing: 4px;
 }
 
-.homepage > button > svg{
-  width: 40px;
-  filter: invert(100%);
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 48px 64px;
+  /* background-color: white; */
+  /* border-top: 1px solid rgb(209, 209, 209);
+  border-bottom: 1px solid rgb(209, 209, 209); */
 }
 
-.homepage > button:hover {
-  background-color: #fca311;
+.input-section > h2 {
+  text-align: center;
+  padding-bottom: 32px;
+  font-size: 1.6rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.homepage > button:hover > svg {
-  filter: invert(0%);
+.input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.homepage > button:hover > p {
-  color: black;
+.input-area > input {
+  width: 300px;
+  padding: 12px 32px;
+  font-size: 1.1rem;
+  border-radius: 15px;
+  border: 2px solid rgb(201, 201, 201);
+}
+
+.log-in-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0px 64px;
+}
+
+#log-in-btn {
+  width: 200px;
+  padding: 8px 16px;
+  background-color: rgb(0, 61, 110);
+  font-size: 1.4rem;
+  color: white;
+  border: none;
+  border-radius: 25px;
+}
+
+.log-in-info > p {
+  margin-top: 32px;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 2px;
+}
+
+.log-in-info > p > span {
+  font-weight: bolder;
+  color: rgb(0, 61, 110);
+}
+
+/* @media (max-width: 1200px) {
+  .log-in-section > img {
+    display: none;
+  }
+} */
+
+/* End of log in section styles */
+/* Start of dashboard section styles */
+
+.dashboard {
+  width: 100%;
+  height: 100%;
+  background-color: skyblue;
 }
