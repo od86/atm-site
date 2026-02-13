@@ -1,0 +1,121 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+section.hidden { 
+  display: none; 
+}
+
+.title {
+  width: 100%;
+  position: fixed;
+  text-align: center;
+  color: white;
+
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title > h1 {
+  font-family: "Fenix", serif;
+  font-weight: bolder;
+  font-size: 5rem;
+  color: #e5e5e5;
+}
+
+.log-in {
+  width: 100vw;
+  height: 100vh;
+  background-color: #141414;
+  background-image: url('background/simple.jpg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.log-in > input {
+  padding: 16px 24px;
+  width: clamp(320px, 5vw, 900px);
+  width: 600px;
+  border-radius: 30px;
+  background-color: black;
+  color: white;
+  font-size: clamp(1rem, 5vw, 1.5rem);
+  border: none;
+}
+
+.log-in > input:focus {
+  outline: none;
+  border: 1px solid #fca311;
+}
+
+#log-in-btn {
+  padding: 8px 32px;
+  border-radius: 10px;
+  font-size: clamp(1rem, 5vw, 1.2rem);
+  border: none;
+  background-color: black;
+  color: #fca311;
+  box-shadow: 2px 2px #fca311;
+}
+
+#log-in-btn:hover {
+  box-shadow: none;
+  box-shadow: 1px 1px rgb(26, 26, 26);
+}
+
+.homepage {
+  background-color: black;
+  background-image: url('background/simple2.jpg');
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-size: cover;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.homepage > button {
+  padding: 16px 32px;
+  font-size: clamp(1.5rem, 5vw, 1.8rem);
+  display: flex;
+  align-items: center;
+  border: 1px solid #fca311;
+  gap: 16px;
+  width: 400px;
+  background-color: black;
+  color: white;
+  border-radius: 25px;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 4px;
+}
+
+.homepage > button > svg{
+  width: 40px;
+  filter: invert(100%);
+}
+
+.homepage > button:hover {
+  background-color: #fca311;
+}
+
+.homepage > button:hover > svg {
+  filter: invert(0%);
+}
+
+.homepage > button:hover > p {
+  color: black;
+}
