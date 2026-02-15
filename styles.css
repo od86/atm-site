@@ -1,26 +1,28 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 body {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
   justify-content: center;
   align-items: center;
   background-color: black;
 }
 
-section.hidden {
+section.hidden,
+div.hidden {
   display: none;
 }
 
+button {
+  cursor:pointer;
+}
+
 .log-in-section {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  /* flex-wrap: wrap; */
   background-color: rgb(244, 244, 244);
 }
 
@@ -51,9 +53,6 @@ section.hidden {
   flex-direction: column;
   gap: 12px;
   padding: 48px 64px;
-  /* background-color: white; */
-  /* border-top: 1px solid rgb(209, 209, 209);
-  border-bottom: 1px solid rgb(209, 209, 209); */
 }
 
 .input-section > h2 {
@@ -87,12 +86,26 @@ section.hidden {
 
 #log-in-btn {
   width: 200px;
-  padding: 8px 16px;
+  padding: 12px 16px;
   background-color: rgb(0, 61, 110);
   font-size: 1.4rem;
   color: white;
   border: none;
   border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#log-in-btn:hover > svg,
+#log-in-btn:hover > p {
+  filter: invert(50%);
+}
+
+#log-in-btn > svg {
+  width: 30px;
+  filter: invert(90%);
 }
 
 .log-in-info > p {
@@ -116,7 +129,406 @@ section.hidden {
 /* Start of dashboard section styles */
 
 .dashboard {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(244, 244, 244);
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr 1fr 6fr;
+  gap: 32px;
+}
+
+
+/* Sidebar styles */
+.sidebar {
+  grid-column: 1/2;
+  grid-row: 1/-1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: rgb(0, 61, 110);
+  color: white;
+}
+
+.sidebar-feats > h1 {
+  align-self: center;
+  font-size: 3rem;
+  margin: 64px 64px 32px 64px;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.sidebar-links > button,
+.sidebar-log-in-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 1.4rem;
+  font-weight: bolder;
+  text-align: left;
+  letter-spacing: 4px;
+  color: rgb(245, 245, 245);
   width: 100%;
+  padding: 16px 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-links > button:hover {
+  background-color: gray;
+}
+
+.sidebar-links > button > svg,
+.sidebar-log-in-btn > svg {
+  width: 40px;
+  filter: invert(100%);
+}
+
+.exit-link {
+  margin-bottom: 48px;
+}
+
+.sidebar-log-in-btn > svg {
+  filter: invert(70%);
+}
+
+.sidebar-log-in-btn > p {
+  color: black;
+  filter: invert(70%);
+}
+
+/* Navbar styles */
+.navbar {
+  grid-column: 2/-1;
+  grid-row: 1/2;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  text-align: center;
+  margin-right: 32px;
+}
+
+.navbar > h1 {
+  font-size: 3rem;
+  font-family: cursive;
+}
+
+.navbar > p {
+  font-size: 1.2rem;
+  font-family:'Courier New', Courier, monospace;
+}
+
+.navbar > p:last-child > a {
+  color: black;
+  text-decoration: none;
+}
+
+.navbar > p:last-child > a:hover {
+  text-decoration: underline;
+}
+
+/* Buttons styles */
+.function-buttons {
+  grid-column: 2/-1;
+  grid-row: 2/3;
+  display: flex;
+  gap: 16px;
+  overflow: scroll;
+  margin-right: 32px;
+}
+
+.function-buttons > button {
+  flex: 1;
+  border-radius: 10px;
+  border: 2px solid rgb(0, 140, 255);
+  background-color: transparent;
+  font-size: 1.6rem;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 4px;
+  min-width: 230px;
+  min-height: 44px;
+}
+
+.function-buttons > button:hover {
+  background-color: rgb(224, 224, 224);
+}
+
+/* Transactions styles */
+.transactions {
+  grid-column: 2/3;
+  grid-row: 3/-1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 16px 0px 32px 0px;
+}
+
+.transactions > h1,
+.withdraw-counts > h1,
+.balance > h1,
+.withdraw > h1,
+.pin > h1 {
+  font-size: 2rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.previous-transactions {
   height: 100%;
-  background-color: skyblue;
+  background-color: white;
+  border-radius: 25px;
+  overflow: scroll;
+}
+
+.no-transactions-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-top: 64px;
+}
+
+.no-transactions-data > p {
+  font-size: 1.4rem;
+}
+
+.no-transactions-data > button {
+  padding: 24px 16px 4px 16px;
+  background-color: transparent;
+  color: rgb(0, 140, 255);
+  border: none;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
+  letter-spacing: 4px;
+  font-size: 1.2rem;
+}
+
+.no-transactions-data > button:hover {
+  border-bottom: 2px solid rgb(0, 140, 255);
+}
+
+/* Withdraw count styles */
+.withdraw-counts {
+  grid-column: 3/4;
+  grid-row: 3/-1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 16px 32px 32px 0px;
+  overflow: scroll;
+}
+
+.withdraw-counts-order {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.withdraw-count {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 0px 32px;
+  border-radius: 15px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.1rem;
+}
+
+.withdraw-count > p:last-child {
+  color: rgb(0, 140, 255);
+  font-weight: bold;
+}
+
+/* General styles */
+.balance,
+.withdraw,
+.pin {
+  grid-column: 2/-1;
+  grid-row: 2/-1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  margin: 0px 32px 32px 0px;
+}
+
+.balance-items,
+.withdraw-items,
+.pin-items {
+  height: 100%;
+  background-color: white;
+  border-radius: 25px;
+  padding: 24px;
+}
+
+.withdraw-title,
+.balance-title,
+.pin-title {
+  display: flex;
+  justify-content: space-around;
+}
+
+#withdraw-back,
+#balance-back,
+#pin-back {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#withdraw-back > svg, 
+#balance-back > svg,
+#pin-back > svg {
+  width: 30px;
+
+}
+
+#withdraw-back > p,
+#balance-back > p,
+#pin-back > p {
+  font-size: 1.4rem;
+  color: rgb(207, 31, 31);
+}
+
+#withdraw-back:hover,
+#balance-back:hover,
+#pin-back:hover {
+  font-size: 1.4rem;
+  color: rgb(207, 31, 31);
+  text-decoration: underline;
+}
+
+/* Balance styles */
+.balance-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  margin-top: 128px;
+}
+
+.balance-amount-container {
+  padding: 8px 32px;
+}
+
+#balance-amount {
+  font-size: 4rem;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  letter-spacing: 8px;
+}
+
+.balance-info {
+  display: flex;
+  gap: 48px;
+}
+
+.balance-info-box {
+  border: 2px solid rgb(0, 140, 255);
+  border-radius: 25px;
+  padding: 32px;
+  width: 400px;
+  text-align: center;
+}
+
+/* Withdraw styles */
+.withdraw-btns {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 128px;
+  padding: 0px 32px;
+  margin-top: 128px;
+}
+
+.quick-withdraw {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 64px;
+}
+
+.quick-withdraw > button {
+  flex: 1;
+  padding: 48px;
+  font-size: 1.4rem;
+  border: 2px solid rgb(0, 140, 255);
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+.quick-withdraw > button:hover {
+  background-color: rgb(0, 140, 255);
+  color: white;
+}
+
+.custom-withdraw {
+  align-self: center;
+  display: flex;
+  gap: 16px;
+}
+
+.custom-withdraw > input {
+  background-color: rgb(245, 245, 245);
+  border-radius: 20px;
+  border: none;
+  padding: 24px 48px;
+  font-size: 1.3rem;
+  width: 500px;
+}
+
+.custom-withdraw > button {
+  font-size: 1.3rem;
+  background-color: rgb(0, 140, 255);
+  border: 2px solid rgb(0, 140, 255);
+  color: white;
+  border-radius: 20px;
+  padding: 8px 48px;
+  font-weight: bold;
+}
+
+.custom-withdraw > button:hover {
+  background-color: rgb(0, 106, 192);
+  border: 2px solid rgb(0, 106, 192);
+}
+
+/* Change PIN styles */
+.change-pin-area {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  margin-top: 128px;
+}
+
+.change-pin-area > input {
+  background-color: rgb(245, 245, 245);
+  border-radius: 40px;
+  border: none;
+  padding: 24px 48px;
+  font-size: 1.3rem;
+  width: 50%;
+}
+
+#change-pin-confirm {
+  margin-top: 32px;
+  font-size: 1.6rem;
+  background-color: transparent;
+  border: 2px solid rgb(0, 140, 255);
+  border-radius: 10px;
+  padding: 8px 48px;
+}
+
+#change-pin-confirm:hover {
+  background-color: rgb(0, 140, 255);
+  color: white;
 }
