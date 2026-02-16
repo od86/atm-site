@@ -220,8 +220,11 @@ button {
 }
 
 .navbar > h1 {
-  font-size: 3rem;
-  font-family: cursive;
+  font-size: 2.4rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: rgb(0, 86, 156);
+  letter-spacing: 4px;
 }
 
 .navbar > p {
@@ -330,7 +333,6 @@ button {
 
 .previous-transactions-columns {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 24px 32px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
@@ -338,12 +340,18 @@ button {
   color: rgb(0, 140, 255);
 }
 
+
 .previous-transaction {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 20px 32px;
   font-family: 'Courier New', Courier, monospace;
+}
+
+.previous-transactions-columns > p,
+.previous-transaction > p {
+  flex: 1;
+  text-align: center;
 }
 
 .previous-transaction:nth-child(odd) {

@@ -85,7 +85,7 @@ function showFullDashboard() {
 }
 
 function updateName() {
-  document.querySelector('#name-title').textContent = currentUser;
+  document.querySelector('#name-title').textContent = currentUser.toUpperCase();
 }
 
 // Hides everything in dashboard aside from sidebar and navbar
@@ -274,7 +274,7 @@ function showTransactions() {
       <p id="transaction-id${idIncrementor}">#tr_${transactionId}</p>
       <p id="transaction-name${idIncrementor}">${currentUser}</p>
       <p id="transaction-type${idIncrementor}">${transaction[0]}</p>
-      <p id="transaction-amount${idIncrementor}">${transaction[1]}</p>
+      <p id="transaction-amount${idIncrementor}">£${transaction[1]}</p>
       <p id="transaction-type${idIncrementor}">${transaction[2]}</p>
     </div>`;
 
