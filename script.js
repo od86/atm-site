@@ -3,9 +3,7 @@
 // Make sure input is clear on every log in page at first launch
 // document.querySelector('#user-name').value = '';
 // clearInputs();
-// let thing = new Date();
 
-// console.log(thing.getUTCMonth())
 let attemptsRemaining = 3;
 let currentUser = null;
 
@@ -83,6 +81,41 @@ function showWithdrawCount() {
   document.querySelector('#count5').textContent = quickCount[4];
 }
 
+function removePreviousTransactions() {
+  dashboard = document.querySelector('.previous-transactions');
+  while(dashboard.childNodes.length > 2) {
+    dashboard.removeChild(dashboard.lastChild);
+  }
+}
+
+function showTransactions() {
+  userInfo = JSON.parse(localStorage.getItem(currentUser));
+  idIncrementor = 1;
+
+  removePreviousTransactions();
+
+  if (userInfo[3] == 0) {
+    document.querySelector('.no-transactions-data').classList.remove('hidden');
+    return;
+  }
+
+  userInfo[2].forEach(transaction => {
+    let transactionId = idIncrementor;
+    if (idIncrementor < 10) { transactionId = `0${idIncrementor}`; }
+
+    document.querySelector('.previous-transactions').innerHTML += `
+    <div class="previous-transaction">
+      <p id="transaction-id${idIncrementor}">#tr_${transactionId}</p>
+      <p id="transaction-name${idIncrementor}">${currentUser}</p>
+      <p id="transaction-type${idIncrementor}">${transaction[0]}</p>
+      <p id="transaction-amount${idIncrementor}">${transaction[1]}</p>
+      <p id="transaction-type${idIncrementor}">${transaction[2]}</p>
+    </div>`;
+
+    idIncrementor += 1;
+  });
+}
+
 // Shows full dashbaord will all homepage items but no feature sections (balance, withdraw, pin change)
 function showFullDashboard(toHide, name) {
   document.querySelector('.dashboard').classList.remove('hidden');
@@ -92,6 +125,7 @@ function showFullDashboard(toHide, name) {
   document.querySelector('#name-title').textContent = name.charAt(0).toUpperCase() + name.slice(1);
   toHide.classList.add('hidden');
   showWithdrawCount();
+  showTransactions();
 }
 
 // Hides dashbaord filler items (function-buttons, transactions, withdraw-counts) and shows
@@ -113,6 +147,7 @@ function showDashboard() {
   document.querySelector('.balance').classList.add('hidden');
   document.querySelector('.withdraw').classList.add('hidden');
   document.querySelector('.pin').classList.add('hidden');
+  showTransactions();
 }
 
 function setBalance() {

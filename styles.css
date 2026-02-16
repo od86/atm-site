@@ -7,7 +7,7 @@
 body {
   justify-content: center;
   align-items: center;
-  background-color: black;
+  background-color: rgb(244, 244, 244);
 }
 
 section.hidden,
@@ -266,6 +266,7 @@ button {
   flex-direction: column;
   gap: 16px;
   margin: 16px 0px 32px 0px;
+  overflow: scroll;
 }
 
 .transactions > h1,
@@ -282,6 +283,7 @@ button {
   background-color: white;
   border-radius: 25px;
   overflow: scroll;
+  flex-direction: column;
 }
 
 .no-transactions-data {
@@ -309,6 +311,28 @@ button {
 
 .no-transactions-data > button:hover {
   border-bottom: 2px solid rgb(0, 140, 255);
+}
+
+.previous-transactions-columns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  letter-spacing: 2px;
+  color: rgb(0, 140, 255);
+}
+
+.previous-transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.previous-transaction:nth-child(even) {
+  background-color: rgb(240, 240, 240);
 }
 
 /* Withdraw count styles */
