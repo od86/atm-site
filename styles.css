@@ -19,6 +19,30 @@ button {
   cursor:pointer;
 }
 
+.error-popup,
+.info-popup {
+  background-color: rgb(207, 32, 32);
+  color: white;
+  position: absolute;
+  padding: 16px 48px;
+  width: fit-content;
+  margin: 256px 64px;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  font-size: 1.4rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+}
+
+.info-popup {
+  background-color: rgb(30, 133, 30);
+}
+
 .log-in-section {
   width: 100vw;
   height: 100vh;
@@ -96,11 +120,11 @@ button {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  /* margin-top: 16px; */
 }
 
-#log-in-btn:hover > svg,
-#log-in-btn:hover > p {
-  filter: invert(50%);
+#log-in-btn:hover {
+  background-color: rgb(0, 86, 156);
 }
 
 #log-in-btn > svg {
@@ -109,14 +133,28 @@ button {
 }
 
 .log-in-info > p {
-  margin-top: 32px;
+  margin-top: 24px;
   font-family: 'Courier New', Courier, monospace;
   letter-spacing: 2px;
+  text-align: center;
 }
 
-.log-in-info > p > span {
+#to-create-from-login {
   font-weight: bolder;
   color: rgb(0, 61, 110);
+  letter-spacing: 0px;
+  background-color: transparent;
+  font-size: 1.1rem;
+  border: none;
+}
+
+#to-create-from-login:hover {
+  font-weight: bolder;
+  color: rgb(0, 140, 255);
+  letter-spacing: 0px;
+  background-color: transparent;
+  font-size: 1.1rem;
+  border: none;
 }
 
 /* @media (max-width: 1200px) {

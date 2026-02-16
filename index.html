@@ -8,6 +8,9 @@
   <script src="script.js" defer></script>
 </head>
 <body>
+  <div class="error-popup hidden"></div>
+  <div class="info-popup hidden"></div>
+
   <section class="log-in-section">
     <img src="img/card.jpg" alt="">
 
@@ -51,7 +54,7 @@
           </svg>
           <p>LOG IN</p>
         </button>
-        <p>Attempts Remaining: <span id="attempts-remaining">3</span></p>
+        <p>Don't have an account? <button id="to-create-from-login">Create one</button></p>
       </div>
     </div>
   </section>
@@ -224,7 +227,7 @@
         <div class="change-pin-area">
           <input type="password" id="new-pin" maxlength="4" placeholder="New PIN">
           <input type="password" id="confirm-pin" maxlength="4" placeholder="Confirm PIN">
-          <button id="change-pin-confirm">Change</button>
+          <button id="change-pin-confirm">Confrim</button>
         </div>
       </div>
     </div>

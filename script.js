@@ -15,21 +15,21 @@ function logIn() {
 
   // When pin is invalid
   if (inputPin.length != 4) {
-    console.log('Invalid PIN!')
+    showErrorPopup('INVALID PIN!');
     return; 
   }
 
   // When account doesnt exit
   if (localStorage.getItem(inputName) == null) { 
-    console.log('Account doesnt exist!');
+    showErrorPopup('ACCOUNT DOES NOT EXIST!');
     return;
   }
 
   // When pin is incorrect
   if (JSON.parse(localStorage.getItem(inputName))[0] != inputPin) { 
-    console.log('Incorrect PIN!');
     attemptsRemaining -= 1;
-    updateAttemptsRemaining();
+    // updateAttemptsRemaining();
+    showErrorPopup(`WRONG PIN! Attempts left: ${attemptsRemaining}`);
   } else {
     currentUser = inputName;
     hideLoginPage();
@@ -39,8 +39,27 @@ function logIn() {
   if (attemptsRemaining == 0) {
     document.querySelector('#user-name').setAttribute('disabled', true);
     document.querySelector('#user-pin').setAttribute('disabled', true);
+    showErrorPopup('ACCOUNT LOCKED');
     return;
   }
+}
+
+function showErrorPopup(text) {
+  document.querySelector('.error-popup').textContent = text;
+  document.querySelector('.error-popup').classList.remove('hidden');
+
+  setTimeout(() => {
+    document.querySelector('.error-popup').classList.add('hidden');
+  }, 2000);
+}
+
+function showInfoPopup(text) {
+  document.querySelector('.info-popup').textContent = text;
+  document.querySelector('.info-popup').classList.remove('hidden');
+
+  setTimeout(() => {
+    document.querySelector('.info-popup').classList.add('hidden');
+  }, 2000);
 }
 
 function hideLoginPage() {
@@ -141,12 +160,12 @@ function createdNewAccount() {
   confirmPin = document.querySelector('#user-new-confirm-pin').value;
 
   if (localStorage.getItem(newName) != null) { 
-    console.log('Account already exists!');
+    showErrorPopup('ACCOUNT ALREADY EXISTS!');
     return;
   }
 
   if (newPin != confirmPin) {
-    console.log('PINs dont match!');
+    showErrorPopup('PINS MUST BE MATCH!');
     return;
   }
 
@@ -162,7 +181,13 @@ document.querySelector('#create-account-btn').addEventListener('click', createdN
 document.querySelector('#to-log-in-btn-from-create').addEventListener('click', () => {
   document.querySelector('.create-account').classList.add('hidden');
   document.querySelector('.log-in-items').classList.remove('hidden');
-})
+});
+
+// Create account link button
+document.querySelector('#to-create-from-login').addEventListener('click', () => {
+  document.querySelector('.log-in-items').classList.add('hidden');
+  document.querySelector('.create-account').classList.remove('hidden');
+});
 
 // Log out button
 document.querySelector('#to-log-in-btn').addEventListener('click', () => {
@@ -174,7 +199,7 @@ document.querySelector('#to-log-in-btn').addEventListener('click', () => {
   document.querySelector('.create-account').classList.remove('hidden');
   
   attemptsRemaining = 3;
-  updateAttemptsRemaining();
+  // updateAttemptsRemaining();
 });
 
 // Balance link buttons
@@ -207,7 +232,7 @@ document.querySelector('#custom-withdraw-confirm').addEventListener('click', cus
 // Makes sure on custom input user inputs a number divisible by 5
 function customWithdrawAmount() {
   customAmount = parseInt(document.querySelector('#custom-amount-input').value);
-  if (customAmount % 5 == 0) { withdrawAmount(customAmount , 'custom'); }
+  if (customAmount % 5 == 0) { withdrawAmount(customAmount , 'custom'); } else { showErrorPopup('INAVLID AMOUNT!'); }
 }
 
 // Removes amount from balance, adds transaction, updates num of transactions and total withdrawn
@@ -215,8 +240,13 @@ function withdrawAmount(amount, type) {
   userInfo = JSON.parse(localStorage.getItem(currentUser));
   totalWithdrawn = 0;
 
-  if (amount > userInfo[1]) { return; }
+  if (amount > userInfo[1]) {
+    showErrorPopup('INSUFFICIENT FUNDS!');
+    return; 
+  }
 
+  showInfoPopup(`WITHDREW - £${amount}`);
+  
   userInfo[1] -= amount;
   userInfo[2].push([type, amount, `${(new Date).getDate()}/${(new Date).getMonth()}/${(new Date).getFullYear()}`]);
   userInfo[2].forEach(transaction => { totalWithdrawn += transaction[1]; });
@@ -297,9 +327,16 @@ document.querySelector('#change-pin-confirm').addEventListener('click', () => {
   confirmPin = document.querySelector('#confirm-pin').value;
   userInfo = JSON.parse(localStorage.getItem(currentUser));
 
-  if (newPin != confirmPin) { return; }
-  if (newPin == userInfo[0]) { return; }
-
+  if (newPin != confirmPin) {
+    showErrorPopup('PINS MUST MATCH!');
+    return; 
+  }
+  if (newPin == userInfo[0]) {
+    showErrorPopup('PIN CANNOT BE SAME AS PREVIOUS');
+    return; 
+  }
+  
+  showInfoPopup('PIN CHANGED');
   userInfo[0] = newPin;
   localStorage.setItem(currentUser, JSON.stringify(userInfo));
 });
