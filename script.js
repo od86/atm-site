@@ -13,39 +13,42 @@ function logIn() {
   inputPin = document.querySelector('#user-pin').value;
   clearEnterInputs();
 
-  if (inputPin.length != 4 || attemptsRemaining == 0) { return; }
-
-  correctInfo(inputName, inputPin);
-
-  // Disables the input elements once the user has gotten the pin wrong 3 times
-  if (attemptsRemaining == 0) {
-    document.querySelector('#user-name').setAttribute('disabled', true);
-    document.querySelector('#user-pin').setAttribute('disabled', true);
+  // When pin is invalid
+  if (inputPin.length != 4) {
+    console.log('Invalid PIN!')
+    return; 
   }
-}
 
-// Checks if pin is correct or makes new account if one doesnt exit
-function correctInfo(name, pin) {
-  userData = JSON.parse(localStorage.getItem(inputName));
-  
+  // When account doesnt exit
   if (localStorage.getItem(inputName) == null) { 
-    setUpNewUser(inputName, pin); 
-  } else if (userData[0] != pin) { 
-    attemptsRemaining -= 1;
-    updateAttemptsRemaining();
+    console.log('Account doesnt exist!');
     return;
   }
 
-  currentUser = name;
+  // When pin is incorrect
+  if (JSON.parse(localStorage.getItem(inputName))[0] != inputPin) { 
+    console.log('Incorrect PIN!');
+    attemptsRemaining -= 1;
+    updateAttemptsRemaining();
+  } else {
+    currentUser = inputName;
+    hideLoginPage();
+  }
+
+    // When user runs out of attempts
+  if (attemptsRemaining == 0) {
+    document.querySelector('#user-name').setAttribute('disabled', true);
+    document.querySelector('#user-pin').setAttribute('disabled', true);
+    return;
+  }
+}
+
+function hideLoginPage() {
   showFullDashboard();
   hideSpecificItem(document.querySelector('.log-in-section'));
   hideSpecificItem(document.querySelector('.create-account'));
-  hideSpecificItem(document.querySelector('.log-in-items'))
+  hideSpecificItem(document.querySelector('.log-in-items'));
 }
-
-
-// localSotrage = [key, value] = [name, [pin, balance, transactions, number of withdrawals, total withdrawn]]
-function setUpNewUser(name, pin) { localStorage.setItem(name, JSON.stringify([pin, 1000, [], 0, 0])); }
 
 function displayDashboard() { document.querySelector('.dashboard').classList.remove('hidden'); }
 function hideDashboard() { document.querySelector('.dashboard').classList.add('hidden'); }
@@ -78,6 +81,11 @@ function showFullDashboard() {
   hideDashboardActions();
   showTransactions();
   showWithdrawCount();
+  updateName();
+}
+
+function updateName() {
+  document.querySelector('#name-title').textContent = currentUser;
 }
 
 // Hides everything in dashboard aside from sidebar and navbar
@@ -124,6 +132,31 @@ function showChangePinPage() {
   hideFullDashboard();
   showSpecificItem(document.querySelector('.pin'))
 }
+
+// Makes sure account doesnt exit and pins match
+function createdNewAccount() {
+  newName = document.querySelector('#user-new-name').value;
+  newBalance = document.querySelector('#user-new-balance').value;
+  newPin = document.querySelector('#user-new-pin').value;
+  confirmPin = document.querySelector('#user-new-confirm-pin').value;
+
+  if (localStorage.getItem(newName) != null) { 
+    console.log('Account already exists!');
+    return;
+  }
+
+  if (newPin != confirmPin) {
+    console.log('PINs dont match!');
+    return;
+  }
+
+  localStorage.setItem(newName, JSON.stringify([newPin, parseInt(newBalance), [], 0, 0]));
+  currentUser = newName;
+  hideLoginPage();
+}
+
+// Create new account button
+document.querySelector('#create-account-btn').addEventListener('click', createdNewAccount);
 
 // Log in link button
 document.querySelector('#to-log-in-btn-from-create').addEventListener('click', () => {
@@ -273,6 +306,7 @@ document.querySelector('#change-pin-confirm').addEventListener('click', () => {
 
 
 // Updates the current time every minutes
+showTime()
 setInterval(showTime, 60000);
 
 function showTime() {
