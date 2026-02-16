@@ -134,7 +134,7 @@ button {
   background-color: rgb(244, 244, 244);
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
-  grid-template-rows: 1fr 1fr 6fr;
+  grid-template-rows: 1fr 2fr 7fr;
   gap: 32px;
 }
 
@@ -180,11 +180,10 @@ button {
 }
 
 .sidebar-links > button:hover {
-  background-color: gray;
+  background-color: rgb(0, 36, 66);
 }
 
-.sidebar-links > button > svg,
-.sidebar-log-in-btn > svg {
+.sidebar-links > button > svg {
   width: 40px;
   filter: invert(100%);
 }
@@ -193,13 +192,19 @@ button {
   margin-bottom: 48px;
 }
 
+.sidebar-log-in-btn:hover > p {
+  border-bottom: 3px solid red;
+}
+
 .sidebar-log-in-btn > svg {
-  filter: invert(70%);
+  width: 40px;
+  fill: red;
 }
 
 .sidebar-log-in-btn > p {
-  color: black;
-  filter: invert(70%);
+  color: red;
+  font-size: 1.6rem;
+  border-bottom: 2px solid rgb(0, 61, 110);
 }
 
 /* Navbar styles */
@@ -210,6 +215,7 @@ button {
   justify-content: space-evenly;
   align-items: center;
   text-align: center;
+  margin-top: 16px;
   margin-right: 32px;
 }
 
@@ -237,15 +243,22 @@ button {
   grid-column: 2/-1;
   grid-row: 2/3;
   display: flex;
+  flex-direction: column;
   gap: 16px;
   overflow: scroll;
   margin-right: 32px;
 }
 
-.function-buttons > button {
+.action-buttons {
+  display: flex;
+  gap: 32px;
+  height: 100%;
+}
+
+.action-buttons > button {
   flex: 1;
   border-radius: 10px;
-  border: 2px solid rgb(0, 140, 255);
+  border: 4px solid rgb(0, 140, 255);
   background-color: transparent;
   font-size: 1.6rem;
   font-family: 'Courier New', Courier, monospace;
@@ -254,8 +267,9 @@ button {
   min-height: 44px;
 }
 
-.function-buttons > button:hover {
-  background-color: rgb(224, 224, 224);
+.action-buttons > button:hover {
+  background-color: rgb(0, 140, 255);
+  color: white;
 }
 
 /* Transactions styles */
@@ -269,6 +283,7 @@ button {
   overflow: scroll;
 }
 
+.function-buttons > h1,
 .transactions > h1,
 .withdraw-counts > h1,
 .balance > h1,
@@ -413,7 +428,7 @@ button {
 #balance-back > svg,
 #pin-back > svg {
   width: 30px;
-
+  fill: rgb(207, 31, 31);
 }
 
 #withdraw-back > p,
@@ -457,7 +472,7 @@ button {
 }
 
 .balance-info-box {
-  border: 2px solid rgb(0, 140, 255);
+  border: 4px solid rgb(0, 140, 255);
   border-radius: 25px;
   padding: 32px;
   width: 400px;
@@ -484,9 +499,12 @@ button {
   flex: 1;
   padding: 48px;
   font-size: 1.4rem;
-  border: 2px solid rgb(0, 140, 255);
+  border: 3px solid rgb(0, 140, 255);
   background-color: transparent;
   border-radius: 10px;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
+  letter-spacing: 2px;
 }
 
 .quick-withdraw > button:hover {
@@ -511,17 +529,16 @@ button {
 
 .custom-withdraw > button {
   font-size: 1.3rem;
-  background-color: rgb(0, 140, 255);
-  border: 2px solid rgb(0, 140, 255);
+  background-color: rgb(0, 86, 156);
   color: white;
+  border: none;
   border-radius: 20px;
   padding: 8px 48px;
   font-weight: bold;
 }
 
 .custom-withdraw > button:hover {
-  background-color: rgb(0, 106, 192);
-  border: 2px solid rgb(0, 106, 192);
+  background-color: rgb(0, 54, 99);
 }
 
 /* Change PIN styles */
@@ -547,14 +564,15 @@ button {
   margin-top: 32px;
   font-size: 1.6rem;
   background-color: transparent;
-  border: 2px solid rgb(0, 140, 255);
+  background-color: rgb(0, 86, 156);
+  color: white;
+  border: none;
   border-radius: 10px;
-  padding: 8px 48px;
+  padding: 16px 64px;
 }
 
 #change-pin-confirm:hover {
-  background-color: rgb(0, 140, 255);
-  color: white;
+  background-color: rgb(0, 54, 99);
 }
 
 /* Create account styles */
