@@ -1,45 +1,21 @@
-localStorage.clear();
-
-// Make sure input is clear on every log in page at first launch
-// document.querySelector('#user-name').value = '';
-// clearInputs();
+// localStorage.clear();
 
 let attemptsRemaining = 3;
 let currentUser = null;
 
-// For when user clicks log in button
+// User can log in by clicking button or hitting enter key
 document.querySelector('#log-in-btn').addEventListener('click', logIn);
-// For when user hits enter key
-addEventListener('keydown', (event) => { if (event.key == 'Enter') { logIn(); } });
+// addEventListener('keydown', (event) => { if (event.key == 'Enter') { logIn(); } });
 
-function setUpNewUser(name, pin) {
-  // key is user name, data is an array of pin, balance, array of transactions, num of transactions, total withdrawn
-  localStorage.setItem(name, JSON.stringify([pin, 1000, [], 0, 0]))
-}
-
+// Logs the user in
 function logIn() {
-  logInSection = document.querySelector('.log-in-section');
   inputName = document.querySelector('#user-name').value;
   inputPin = document.querySelector('#user-pin').value;
-  clearPIN();
+  clearEnterInputs();
 
-  if(inputPin.length != 4 || attemptsRemaining == 0) { return; }
+  if (inputPin.length != 4 || attemptsRemaining == 0) { return; }
 
-  // If the username doesnt exist it creates a new user with the inputted pin
-  // If the username does exist it checks if pin is correct or not
-  // Otherwise tells user their input was wrong and decrements attempts left
-  if (localStorage.getItem(inputName) == null) {
-    setUpNewUser(inputName, inputPin);
-    currentUser = inputName;
-    showFullDashboard(logInSection, inputName);
-  } else if (JSON.parse(localStorage.getItem(inputName))[0] == inputPin) {
-    currentUser = inputName;
-    showFullDashboard(logInSection, inputName);
-  } else {
-    console.log('Wrong PIN');
-    attemptsRemaining -= 1
-    document.querySelector('#attempts-remaining').textContent = `£${attemptsRemaining}`;
-  }
+  correctInfo(inputName, inputPin);
 
   // Disables the input elements once the user has gotten the pin wrong 3 times
   if (attemptsRemaining == 0) {
@@ -48,17 +24,178 @@ function logIn() {
   }
 }
 
-function clearPIN() {
+// Checks if pin is correct or makes new account if one doesnt exit
+function correctInfo(name, pin) {
+  userData = JSON.parse(localStorage.getItem(inputName));
+  
+  if (localStorage.getItem(inputName) == null) { 
+    setUpNewUser(inputName, pin); 
+  } else if (userData[0] != pin) { 
+    attemptsRemaining -= 1;
+    updateAttemptsRemaining();
+    return;
+  }
+
+  currentUser = name;
+  showFullDashboard();
+  hideSpecificItem(document.querySelector('.log-in-section'));
+  hideSpecificItem(document.querySelector('.create-account'));
+  hideSpecificItem(document.querySelector('.log-in-items'))
+}
+
+
+// localSotrage = [key, value] = [name, [pin, balance, transactions, number of withdrawals, total withdrawn]]
+function setUpNewUser(name, pin) { localStorage.setItem(name, JSON.stringify([pin, 1000, [], 0, 0])); }
+
+function displayDashboard() { document.querySelector('.dashboard').classList.remove('hidden'); }
+function hideDashboard() { document.querySelector('.dashboard').classList.add('hidden'); }
+
+// Shows the main dashboard items - action buttons, transactions history and withdraw counts
+function displayDashboardItems() {
+  document.querySelector('.function-buttons').classList.remove('hidden');
+  document.querySelector('.transactions').classList.remove('hidden');
+  document.querySelector('.withdraw-counts').classList.remove('hidden');
+}
+
+// Hides the main dashboard items - action buttons, transactions history and withdraw counts
+function hideDashboardItems() {
+  document.querySelector('.function-buttons').classList.add('hidden');
+  document.querySelector('.transactions').classList.add('hidden');
+  document.querySelector('.withdraw-counts').classList.add('hidden');
+}
+
+// Hides the main dashboard features - balance, withdraw and change pin
+function hideDashboardActions() {
+  document.querySelector('.balance').classList.add('hidden');
+  document.querySelector('.withdraw').classList.add('hidden');
+  document.querySelector('.pin').classList.add('hidden');
+}
+
+// Shows the full dashboard without actions
+function showFullDashboard() {
+  displayDashboard();
+  displayDashboardItems();
+  hideDashboardActions();
+  showTransactions();
+  showWithdrawCount();
+}
+
+// Hides everything in dashboard aside from sidebar and navbar
+function hideFullDashboard() {
+  hideDashboardItems();
+  hideDashboardActions();
+}
+
+function hideSpecificItem(itemName) { itemName.classList.add('hidden'); }
+function showSpecificItem(itemName) { itemName.classList.remove('hidden'); }
+
+// Clears the users inputs
+function clearEnterInputs() {
+  document.querySelector('#user-name').value = '';
   document.querySelector('#user-pin').value = '';
 }
 
+// Updates the attempts remaining
+function updateAttemptsRemaining() { document.querySelector('#attempts-remaining').textContent = attemptsRemaining; }
+
+// Updates the balance page so it has correct data
+function updateBalancePage() {
+  userInfo = JSON.parse(localStorage.getItem(currentUser));
+  document.querySelector('#balance-amount').textContent = '£' + userInfo[1] + '.00';
+  document.querySelector('#num-of-withdraw').textContent = userInfo[3];
+  document.querySelector('#total-withdraw').textContent = userInfo[4];
+}
+
+// Shows the balance page
+function showBalancePage() {
+  hideFullDashboard();
+  showSpecificItem(document.querySelector('.balance'));
+  updateBalancePage();
+}
+
+// Shows the withdraw page
+function showWithdrawPage() {
+  hideFullDashboard();
+  showSpecificItem(document.querySelector('.withdraw'));
+}
+
+// Shows the change pin page
+function showChangePinPage() {
+  hideFullDashboard();
+  showSpecificItem(document.querySelector('.pin'))
+}
+
+// Log in link button
+document.querySelector('#to-log-in-btn-from-create').addEventListener('click', () => {
+  document.querySelector('.create-account').classList.add('hidden');
+  document.querySelector('.log-in-items').classList.remove('hidden');
+})
+
+// Log out button
+document.querySelector('#to-log-in-btn').addEventListener('click', () => {
+  hideFullDashboard();
+  hideDashboard();
+  clearEnterInputs();
+
+  document.querySelector('.log-in-section').classList.remove('hidden');
+  document.querySelector('.create-account').classList.remove('hidden');
+  
+  attemptsRemaining = 3;
+  updateAttemptsRemaining();
+});
+
+// Balance link buttons
+document.querySelector('#to-balance-btn-func').addEventListener('click', showBalancePage);
+document.querySelector('#to-balance-btn-link').addEventListener('click', showBalancePage);
+
+// Withdraw link buttons
+document.querySelector('#to-withdraw-btn-func').addEventListener('click', showWithdrawPage);
+document.querySelector('#to-withdraw-btn-link').addEventListener('click', showWithdrawPage);
+document.querySelector('#to-withdraw-btn').addEventListener('click', showWithdrawPage);
+
+// Change PIN link buttons
+document.querySelector('#to-pin-btn-func').addEventListener('click', showChangePinPage);
+document.querySelector('#to-pin-btn-link').addEventListener('click', showChangePinPage);
+
+// Back buttons
+document.querySelector('#balance-back').addEventListener('click', showFullDashboard);
+document.querySelector('#withdraw-back').addEventListener('click', showFullDashboard);
+document.querySelector('#pin-back').addEventListener('click', showFullDashboard)
+
+// Withdraw buttons
+document.querySelector('#withdraw5').addEventListener('click', () => { withdrawAmount(5, 'quick'); });
+document.querySelector('#withdraw10').addEventListener('click', () => { withdrawAmount(10, 'quick'); });
+document.querySelector('#withdraw20').addEventListener('click', () => { withdrawAmount(20, 'quick'); });
+document.querySelector('#withdraw40').addEventListener('click', () => { withdrawAmount(40, 'quick'); });
+document.querySelector('#withdraw50').addEventListener('click', () => { withdrawAmount(50, 'quick'); });
+document.querySelector('#custom-withdraw-confirm').addEventListener('click', customWithdrawAmount);
+
+
+// Makes sure on custom input user inputs a number divisible by 5
+function customWithdrawAmount() {
+  customAmount = parseInt(document.querySelector('#custom-amount-input').value);
+  if (customAmount % 5 == 0) { withdrawAmount(customAmount , 'custom'); }
+}
+
+// Removes amount from balance, adds transaction, updates num of transactions and total withdrawn
+function withdrawAmount(amount, type) {
+  userInfo = JSON.parse(localStorage.getItem(currentUser));
+  totalWithdrawn = 0;
+
+  if (amount > userInfo[1]) { return; }
+
+  userInfo[1] -= amount;
+  userInfo[2].push([type, amount, `${(new Date).getDate()}/${(new Date).getMonth()}/${(new Date).getFullYear()}`]);
+  userInfo[2].forEach(transaction => { totalWithdrawn += transaction[1]; });
+  userInfo[3] = userInfo[2].length;
+  userInfo[4] = totalWithdrawn;
+  localStorage.setItem(currentUser, JSON.stringify(userInfo));
+}
+
+// Shows the count for all different withdraw types
 function showWithdrawCount() {
   transactions = JSON.parse(localStorage.getItem(currentUser))[2];
-
-  // How many custom amount transactions there are
   customCount = 0;
-
-  // How many quick amount transaction there are (50, 40, 20, 10, 5)
   quickCount = [0, 0, 0, 0, 0]
 
   transactions.forEach(transaction => {
@@ -81,15 +218,7 @@ function showWithdrawCount() {
   document.querySelector('#count5').textContent = quickCount[4];
 }
 
-function removePreviousTransactions() {
-  dashboard = document.querySelector('.previous-transactions');
-  while(dashboard.childNodes.length > 4) {
-    console.log(dashboard.lastChild);
-    dashboard.removeChild(dashboard.lastChild);
-    console.log(dashboard.childNodes.length)
-  }
-}
-
+// Shows previous transactions in the transactions section on the homepage
 function showTransactions() {
   userInfo = JSON.parse(localStorage.getItem(currentUser));
   idIncrementor = 1;
@@ -120,135 +249,14 @@ function showTransactions() {
   });
 }
 
-// Shows full dashbaord will all homepage items but no feature sections (balance, withdraw, pin change)
-function showFullDashboard(toHide, name) {
-  document.querySelector('.dashboard').classList.remove('hidden');
-  document.querySelector('.function-buttons').classList.remove('hidden');
-  document.querySelector('.transactions').classList.remove('hidden');
-  document.querySelector('.withdraw-counts').classList.remove('hidden');
-  document.querySelector('#name-title').textContent = name.charAt(0).toUpperCase() + name.slice(1);
-  toHide.classList.add('hidden');
-  showWithdrawCount();
-  showTransactions();
-}
+// Remove the previous transactions so that there arent duplicates
+function removePreviousTransactions() {
+  dashboard = document.querySelector('.previous-transactions');
 
-// Hides dashbaord filler items (function-buttons, transactions, withdraw-counts) and shows
-// the section that is passed
-function hideDashboard(toShow) {
-  document.querySelector('.function-buttons').classList.add('hidden');
-  document.querySelector('.transactions').classList.add('hidden');
-  document.querySelector('.withdraw-counts').classList.add('hidden');
-  document.querySelector('.balance').classList.add('hidden');
-  document.querySelector('.withdraw').classList.add('hidden');
-  document.querySelector('.pin').classList.add('hidden');
-  toShow.classList.remove('hidden');
-}
-
-function showDashboard() {
-  document.querySelector('.function-buttons').classList.remove('hidden');
-  document.querySelector('.transactions').classList.remove('hidden');
-  document.querySelector('.withdraw-counts').classList.remove('hidden');
-  document.querySelector('.balance').classList.add('hidden');
-  document.querySelector('.withdraw').classList.add('hidden');
-  document.querySelector('.pin').classList.add('hidden');
-  showTransactions();
-}
-
-function setBalance() {
-  userInfo = JSON.parse(localStorage.getItem(currentUser));
-  document.querySelector('#balance-amount').textContent = '£' + userInfo[1] + '.00';
-  document.querySelector('#num-of-withdraw').textContent = userInfo[3];
-  document.querySelector('#total-withdraw').textContent = userInfo[4];
-}
-
-function updateBalanceWithdrawInfo() {
-  userInfo = JSON.parse(localStorage.getItem(currentUser));
-  totalWithdrawn = 0;
-
-  userInfo[2].forEach(transaction => {
-    totalWithdrawn += transaction[1];
-  });
-
-  userInfo[3] = userInfo[2].length;
-  userInfo[4] = totalWithdrawn;
-
-  localStorage.setItem(currentUser, JSON.stringify(userInfo));
-
-  showWithdrawCount();
-}
-
-function withdrawAmount(amount, type) {
-  userInfo = JSON.parse(localStorage.getItem(currentUser));
-
-  if (amount <= userInfo[1]) {
-    userInfo[1] -= amount;
-    userInfo[2].push([type, amount, `${(new Date).getDate()}/${(new Date).getMonth()}/${(new Date).getFullYear()}`]);
-    localStorage.setItem(currentUser, JSON.stringify(userInfo));
-    updateBalanceWithdrawInfo();
+  while(dashboard.childNodes.length > 4) {
+    dashboard.removeChild(dashboard.lastChild);
   }
 }
-
-// Log out button
-document.querySelector('#to-log-in-btn').addEventListener('click', () => {
-  document.querySelector('.dashboard').classList.add('hidden');
-  document.querySelector('.balance').classList.add('hidden');
-  document.querySelector('.withdraw').classList.add('hidden');
-  document.querySelector('.pin').classList.add('hidden');
-  document.querySelector('.log-in-section').classList.remove('hidden');
-  document.querySelector('#user-name').value = '';
-  attemptsRemaining = 3;
-  document.querySelector('#attempts-remaining').textContent = attemptsRemaining;
-  clearPIN();
-});
-
-// Balance link buttons
-document.querySelector('#to-balance-btn-func').addEventListener('click', () => {
-  hideDashboard(document.querySelector('.balance'));
-  setBalance();
-});
-
-document.querySelector('#to-balance-btn-link').addEventListener('click', () => {
-  hideDashboard(document.querySelector('.balance'));
-  setBalance();
-})
-
-document.querySelector('#balance-back').addEventListener('click', showDashboard);
-
-// Withdraw link buttons
-document.querySelector('#to-withdraw-btn-func').addEventListener('click', () => {
-  hideDashboard(document.querySelector('.withdraw'));
-});
-
-document.querySelector('#to-withdraw-btn-link').addEventListener('click', () => {
-  hideDashboard(document.querySelector('.withdraw'));
-});
-
-document.querySelector('#to-withdraw-btn').addEventListener('click', () => {
-  hideDashboard(document.querySelector('.withdraw'));
-});
-
-document.querySelector('#withdraw-back').addEventListener('click', showDashboard);
-
-document.querySelector('#withdraw5').addEventListener('click', () => { withdrawAmount(5, 'quick'); });
-document.querySelector('#withdraw10').addEventListener('click', () => { withdrawAmount(10, 'quick'); });
-document.querySelector('#withdraw20').addEventListener('click', () => { withdrawAmount(20, 'quick'); });
-document.querySelector('#withdraw40').addEventListener('click', () => { withdrawAmount(40, 'quick'); });
-document.querySelector('#withdraw50').addEventListener('click', () => { withdrawAmount(50, 'quick'); });
-document.querySelector('#custom-withdraw-confirm').addEventListener('click', () => {
-  customAmount = parseInt(document.querySelector('#custom-amount-input').value);
-  if (customAmount % 5 == 0) { withdrawAmount(customAmount , 'custom'); };
-});
-
-// PIN chnage link buttons
-document.querySelector('#to-pin-btn-func').addEventListener('click', () => {
-  hideDashboard(document.querySelector('.pin'));
-});
-
-document.querySelector('#to-pin-btn-link').addEventListener('click', () => {
-  hideDashboard(document.querySelector('.pin'));
-});
-
-document.querySelector('#pin-back').addEventListener('click', showDashboard);
 
 // PIN change functionality
 document.querySelector('#change-pin-confirm').addEventListener('click', () => {
@@ -263,11 +271,12 @@ document.querySelector('#change-pin-confirm').addEventListener('click', () => {
   localStorage.setItem(currentUser, JSON.stringify(userInfo));
 });
 
+
+// Updates the current time every minutes
+setInterval(showTime, 60000);
+
 function showTime() {
   let time = new Date;
   fullTime = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
   document.querySelector('#current-time').textContent = fullTime;
 }
-
-showTime()
-setInterval(showTime, 60000);
