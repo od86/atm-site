@@ -1,4 +1,4 @@
-// localStorage.clear();
+localStorage.clear();
 
 // Make sure input is clear on every log in page at first launch
 // document.querySelector('#user-name').value = '';
@@ -83,8 +83,10 @@ function showWithdrawCount() {
 
 function removePreviousTransactions() {
   dashboard = document.querySelector('.previous-transactions');
-  while(dashboard.childNodes.length > 2) {
+  while(dashboard.childNodes.length > 4) {
+    console.log(dashboard.lastChild);
     dashboard.removeChild(dashboard.lastChild);
+    console.log(dashboard.childNodes.length)
   }
 }
 
@@ -92,11 +94,13 @@ function showTransactions() {
   userInfo = JSON.parse(localStorage.getItem(currentUser));
   idIncrementor = 1;
 
-  removePreviousTransactions();
-
   if (userInfo[3] == 0) {
     document.querySelector('.no-transactions-data').classList.remove('hidden');
     return;
+  } else {
+    document.querySelector('.no-transactions-data').classList.add('hidden');
+    document.querySelector('.previous-transactions-columns').classList.remove('hidden');
+    removePreviousTransactions();
   }
 
   userInfo[2].forEach(transaction => {
