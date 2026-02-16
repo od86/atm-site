@@ -130,7 +130,7 @@ function updateBalancePage() {
   userInfo = JSON.parse(localStorage.getItem(currentUser));
   document.querySelector('#balance-amount').textContent = '£' + userInfo[1] + '.00';
   document.querySelector('#num-of-withdraw').textContent = userInfo[3];
-  document.querySelector('#total-withdraw').textContent = userInfo[4];
+  document.querySelector('#total-withdraw').textContent = `£${userInfo[4]}`;
 }
 
 // Shows the balance page
@@ -201,6 +201,9 @@ document.querySelector('#to-log-in-btn').addEventListener('click', () => {
   attemptsRemaining = 3;
   // updateAttemptsRemaining();
 });
+
+// Side title homepage link
+document.querySelector('#sidebar-homepage').addEventListener('click', showFullDashboard)
 
 // Balance link buttons
 document.querySelector('#to-balance-btn-func').addEventListener('click', showBalancePage);
@@ -348,6 +351,14 @@ setInterval(showTime, 60000);
 
 function showTime() {
   let time = new Date;
-  fullTime = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
+  hours = formatTime(time.getHours());
+  minutes = formatTime(time.getMinutes());
+  fullTime = `${hours}:${minutes} ${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
   document.querySelector('#current-time').textContent = fullTime;
+}
+
+// Formats time so that it has a 0 in front of it if its single digit
+function formatTime(number) {
+  if (number < 10) { return `0${number}`; }
+  return number;
 }
