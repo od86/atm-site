@@ -287,7 +287,7 @@ function showWithdrawCount() {
 // Shows previous transactions in the transactions section on the homepage
 function showTransactions() {
   userInfo = JSON.parse(localStorage.getItem(currentUser));
-  idIncrementor = 1;
+  idIncrementor = userInfo[2].length;
 
   if (userInfo[3] == 0) {
     document.querySelector('.no-transactions-data').classList.remove('hidden');
@@ -298,20 +298,20 @@ function showTransactions() {
     removePreviousTransactions();
   }
 
-  userInfo[2].forEach(transaction => {
+  userInfo[2].reverse().forEach(transaction => {
     let transactionId = idIncrementor;
     if (idIncrementor < 10) { transactionId = `0${idIncrementor}`; }
 
     document.querySelector('.previous-transactions').innerHTML += `
     <div class="previous-transaction">
-      <p id="transaction-id${idIncrementor}">#tr_${transactionId}</p>
-      <p id="transaction-name${idIncrementor}">${currentUser}</p>
-      <p id="transaction-type${idIncrementor}">${transaction[0]}</p>
-      <p id="transaction-amount${idIncrementor}">£${transaction[1]}</p>
-      <p id="transaction-type${idIncrementor}">${transaction[2]}</p>
+      <p>#tr_${transactionId}</p>
+      <p>${currentUser}</p>
+      <p>${transaction[0]}</p>
+      <p>£${transaction[1]}</p>
+      <p>${transaction[2]}</p>
     </div>`;
 
-    idIncrementor += 1;
+    idIncrementor -= 1;
   });
 }
 
@@ -347,13 +347,15 @@ document.querySelector('#change-pin-confirm').addEventListener('click', () => {
 
 // Updates the current time every minutes
 showTime()
-setInterval(showTime, 60000);
+setInterval(showTime, 1000);
 
 function showTime() {
   let time = new Date;
   hours = formatTime(time.getHours());
   minutes = formatTime(time.getMinutes());
-  fullTime = `${hours}:${minutes} ${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
+  days = formatTime(time.getDate());
+  months = formatTime(time.getMonth() + 1)
+  fullTime = `${hours}:${minutes} ${days}/${months}/${time.getFullYear()}`;
   document.querySelector('#current-time').textContent = fullTime;
 }
 
