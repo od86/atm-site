@@ -353,9 +353,10 @@ function showTime() {
   let time = new Date;
   hours = formatTime(time.getHours());
   minutes = formatTime(time.getMinutes());
+  seconds = formatTime(time.getSeconds());
   days = formatTime(time.getDate());
-  months = formatTime(time.getMonth() + 1)
-  fullTime = `${hours}:${minutes} ${days}/${months}/${time.getFullYear()}`;
+  months = formatTime(time.getMonth() + 1);
+  fullTime = `${hours}:${minutes}:${seconds} ${days}/${months}/${time.getFullYear()}`;
   document.querySelector('#current-time').textContent = fullTime;
 }
 
