@@ -1,9 +1,10 @@
-// localStorage.clear();
+// ["name", "[pin, balance, [transactions], numOfWithdraws, totalWithdrawn]"]
+
+localStorage.clear();
 
 let attemptsRemaining = 3;
 let currentUser = null;
 
-// User can log in by clicking button or hitting enter key
 document.querySelector('#log-in-btn').addEventListener('click', logIn);
 // addEventListener('keydown', (event) => { if (event.key == 'Enter') { logIn(); } });
 
@@ -128,7 +129,7 @@ function updateAttemptsRemaining() { document.querySelector('#attempts-remaining
 // Updates the balance page so it has correct data
 function updateBalancePage() {
   userInfo = JSON.parse(localStorage.getItem(currentUser));
-  document.querySelector('#balance-amount').textContent = '£' + userInfo[1] + '.00';
+  document.querySelector('#balance-amount').textContent = '£' + userInfo[1];
   document.querySelector('#num-of-withdraw').textContent = userInfo[3];
   document.querySelector('#total-withdraw').textContent = `£${userInfo[4]}`;
 }
@@ -169,9 +170,29 @@ function createdNewAccount() {
     return;
   }
 
-  localStorage.setItem(newName, JSON.stringify([newPin, parseInt(newBalance), [], 0, 0]));
+  // Check if balance is a valid number and not allow more than 2 decimal places
+  if (validBalance(newBalance) == false) {
+    showErrorPopup('MUST ENTER A VALID BALANCE');
+    return;
+  } 
+
+  localStorage.setItem(newName, JSON.stringify([newPin, newBalance, [], 0, 0]));
   currentUser = newName;
   hideLoginPage();
+}
+
+// Makes sure inputed balance is valid
+function validBalance(str) {
+  decimalCounter = 0;
+  nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
+  valid = true;
+  
+  str.split('').forEach(item => {
+    if (item == ".") { decimalCounter += 1 }
+    if (decimalCounter > 1 || nums.includes(item) == false) { valid = false; }
+  });
+
+  return valid;
 }
 
 // Create new account button
@@ -199,7 +220,6 @@ document.querySelector('#to-log-in-btn').addEventListener('click', () => {
   document.querySelector('.create-account').classList.remove('hidden');
   
   attemptsRemaining = 3;
-  // updateAttemptsRemaining();
 });
 
 // Side title homepage link
@@ -229,13 +249,18 @@ document.querySelector('#withdraw10').addEventListener('click', () => { withdraw
 document.querySelector('#withdraw20').addEventListener('click', () => { withdrawAmount(20, 'quick'); });
 document.querySelector('#withdraw40').addEventListener('click', () => { withdrawAmount(40, 'quick'); });
 document.querySelector('#withdraw50').addEventListener('click', () => { withdrawAmount(50, 'quick'); });
-document.querySelector('#custom-withdraw-confirm').addEventListener('click', customWithdrawAmount);
+document.querySelector('#custom-withdraw-confirm').addEventListener('click', () => {
+  customAmount = document.querySelector('#custom-amount-input').value
+  validCustomWithdraw(customAmount) ? withdrawAmount(parseInt(customAmount), 'custom') : showErrorPopup('INAVLID AMOUNT!')
+});
 
+function validCustomWithdraw(str) {
+  nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+  valid = true;
+  
+  str.split('').forEach(item => { if (nums.includes(item) == false) { valid = false; } });
 
-// Makes sure on custom input user inputs a number divisible by 5
-function customWithdrawAmount() {
-  customAmount = parseInt(document.querySelector('#custom-amount-input').value);
-  if (customAmount % 5 == 0) { withdrawAmount(customAmount , 'custom'); } else { showErrorPopup('INAVLID AMOUNT!'); }
+  return (parseInt(str) % 5 == 0 && valid == true) ? true : false
 }
 
 // Removes amount from balance, adds transaction, updates num of transactions and total withdrawn
