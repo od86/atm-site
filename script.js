@@ -1,6 +1,6 @@
 // ["name", "[pin, balance, [transactions], numOfWithdraws, totalWithdrawn]"]
 
-localStorage.clear();
+// localStorage.clear();
 
 let attemptsRemaining = 3;
 let currentUser = null;
@@ -36,7 +36,7 @@ function logIn() {
     hideLoginPage();
   }
 
-    // When user runs out of attempts
+  // When user runs out of attempts
   if (attemptsRemaining == 0) {
     document.querySelector('#user-name').setAttribute('disabled', true);
     document.querySelector('#user-pin').setAttribute('disabled', true);
@@ -130,7 +130,7 @@ function updateAttemptsRemaining() { document.querySelector('#attempts-remaining
 function updateBalancePage() {
   userInfo = JSON.parse(localStorage.getItem(currentUser));
 
-  document.querySelector('#balance-amount').textContent = '£' + userInfo[1] + extraContent(userInfo[1]);
+  document.querySelector('#balance-amount').textContent = '£' + userInfo[1];
   document.querySelector('#num-of-withdraw').textContent = userInfo[3];
   document.querySelector('#total-withdraw').textContent = `£${userInfo[4]}`;
 }
@@ -139,7 +139,7 @@ function extraContent(num) {
   needsZeros = true;
   num.split('').forEach(item => { if (item == '.') { needsZeros = false } });
 
-  return needsZeros ? ".00" : ""
+  return needsZeros ? ".00" : "";
 }
 
 // Shows the balance page
@@ -167,6 +167,12 @@ function createdNewAccount() {
   newBalance = document.querySelector('#user-new-balance').value;
   newPin = document.querySelector('#user-new-pin').value;
   confirmPin = document.querySelector('#user-new-confirm-pin').value;
+
+  document.querySelector('#user-new-name').value = "";
+  document.querySelector('#user-new-balance').value = "";
+  document.querySelector('#user-new-pin').value = "";
+  document.querySelector('#user-new-confirm-pin').value = "";
+
 
   if (localStorage.getItem(newName) != null) { 
     showErrorPopup('ACCOUNT ALREADY EXISTS!');
@@ -258,7 +264,8 @@ document.querySelector('#withdraw20').addEventListener('click', () => { withdraw
 document.querySelector('#withdraw40').addEventListener('click', () => { withdrawAmount(40, 'quick'); });
 document.querySelector('#withdraw50').addEventListener('click', () => { withdrawAmount(50, 'quick'); });
 document.querySelector('#custom-withdraw-confirm').addEventListener('click', () => {
-  customAmount = document.querySelector('#custom-amount-input').value
+  customAmount = document.querySelector('#custom-amount-input').value;
+  document.querySelector('#custom-amount-input').value = "";
   validCustomWithdraw(customAmount) ? withdrawAmount(parseInt(customAmount), 'custom') : showErrorPopup('INAVLID AMOUNT!')
 });
 
@@ -361,6 +368,9 @@ function removePreviousTransactions() {
 document.querySelector('#change-pin-confirm').addEventListener('click', () => {
   newPin = document.querySelector('#new-pin').value;
   confirmPin = document.querySelector('#confirm-pin').value;
+  document.querySelector('#new-pin').value = "";
+  document.querySelector('#confirm-pin').value = "";
+
   userInfo = JSON.parse(localStorage.getItem(currentUser));
 
   if (newPin != confirmPin) {
