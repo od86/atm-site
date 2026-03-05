@@ -129,9 +129,17 @@ function updateAttemptsRemaining() { document.querySelector('#attempts-remaining
 // Updates the balance page so it has correct data
 function updateBalancePage() {
   userInfo = JSON.parse(localStorage.getItem(currentUser));
-  document.querySelector('#balance-amount').textContent = '£' + userInfo[1];
+
+  document.querySelector('#balance-amount').textContent = '£' + userInfo[1] + extraContent(userInfo[1]);
   document.querySelector('#num-of-withdraw').textContent = userInfo[3];
   document.querySelector('#total-withdraw').textContent = `£${userInfo[4]}`;
+}
+
+function extraContent(num) {
+  needsZeros = true;
+  num.split('').forEach(item => { if (item == '.') { needsZeros = false } });
+
+  return needsZeros ? ".00" : ""
 }
 
 // Shows the balance page
