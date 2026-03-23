@@ -1,4 +1,4 @@
-// ["name", "[pin, balance, [transactions], numOfWithdraws, totalWithdrawn]"]
+// name", "[pin, balance, [transactions], numOfWithdraws, totalWithdrawn]"]
 
 // localStorage.clear();
 
@@ -21,7 +21,7 @@ function logIn() {
 
   // When account doesnt exit
   if (localStorage.getItem(inputName) == null || inputName == "") { 
-    showErrorPopup('ACCOUNT DOES NOT EXIST!');
+    showErrorPopup('ACCOUNT DOES NOT EXIST');
     return;
   }
 
@@ -63,7 +63,7 @@ function showErrorPopup(text) {
 
   setTimeout(() => {
     document.querySelector('.error-popup').classList.add('hidden');
-  }, 2000);
+  }, 3000);
 }
 
 function showInfoPopup(text) {
@@ -72,7 +72,7 @@ function showInfoPopup(text) {
 
   setTimeout(() => {
     document.querySelector('.info-popup').classList.add('hidden');
-  }, 2000);
+  }, 3000);
 }
 
 function hideLoginPage() {
@@ -176,7 +176,7 @@ function showChangePinPage() {
 }
 
 // Makes sure account doesnt exit and pins match
-function createdNewAccount() {
+function createNewAccount() {
   newName = document.querySelector('#user-new-name').value;
   newBalance = document.querySelector('#user-new-balance').value;
   newPin = document.querySelector('#user-new-pin').value;
@@ -188,18 +188,23 @@ function createdNewAccount() {
   document.querySelector('#user-new-confirm-pin').value = "";
 
   if (localStorage.getItem(newName) != null) { 
-    showErrorPopup('ACCOUNT ALREADY EXISTS!');
+    showErrorPopup('ACCOUNT ALREADY EXISTS');
+    return;
+  }
+
+  if (validPIN(newPin) == false) {
+    showErrorPopup('INVALID PIN');
     return;
   }
 
   if (newPin != confirmPin) {
-    showErrorPopup('PINS MUST BE MATCH!');
+    showErrorPopup('PINS MUST BE MATCH');
     return;
   }
 
   // Check if balance is a valid number and not allow more than 2 decimal places
   if (validBalance(newBalance) == false) {
-    showErrorPopup('MUST ENTER A VALID BALANCE');
+    showErrorPopup('INVALID BALANCE');
     return;
   } 
 
@@ -210,20 +215,16 @@ function createdNewAccount() {
 
 // Makes sure inputed balance is valid
 function validBalance(str) {
-  decimalCounter = 0;
-  nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."]
+  nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   valid = true;
-  
-  str.split('').forEach(item => {
-    if (item == ".") { decimalCounter += 1 }
-    if (decimalCounter > 1 || nums.includes(item) == false) { valid = false; }
-  });
 
+  str.split('').forEach(item => { if (!nums.includes(item)) { valid = false; } });
+  
   return valid;
 }
 
 // Create new account button
-document.querySelector('#create-account-btn').addEventListener('click', createdNewAccount);
+document.querySelector('#create-account-btn').addEventListener('click', createNewAccount);
 
 // Log in link button
 document.querySelector('#to-log-in-btn-from-create').addEventListener('click', () => {
@@ -281,7 +282,7 @@ document.querySelector('#withdraw100').addEventListener('click', () => { withdra
 document.querySelector('#custom-withdraw-confirm').addEventListener('click', () => {
   customAmount = document.querySelector('#custom-amount-input').value;
   document.querySelector('#custom-amount-input').value = "";
-  validCustomWithdraw(customAmount) ? withdrawAmount(parseInt(customAmount), 'custom') : showErrorPopup('INAVLID AMOUNT!')
+  validCustomWithdraw(customAmount) ? withdrawAmount(parseInt(customAmount), 'custom') : showErrorPopup('INAVLID AMOUNT')
 });
 
 function validCustomWithdraw(str) {
@@ -299,14 +300,14 @@ function withdrawAmount(amount, type) {
   totalWithdrawn = 0;
 
   if (amount > userInfo[1]) {
-    showErrorPopup('INSUFFICIENT FUNDS!');
+    showErrorPopup('INSUFFICIENT FUNDS');
     return; 
   }
 
   showInfoPopup(`WITHDREW - £${amount}`);
   
   userInfo[1] -= amount;
-  userInfo[2].push([type, amount, `${(new Date).getDate()}/${(new Date).getMonth()}/${(new Date).getFullYear()}`]);
+  userInfo[2].push([type, amount, `${getDate()}`]);
   userInfo[2].forEach(transaction => { totalWithdrawn += transaction[1]; });
   userInfo[3] = userInfo[2].length;
   userInfo[4] = totalWithdrawn;
@@ -397,10 +398,16 @@ function changePIN() {
 
   userInfo = JSON.parse(localStorage.getItem(currentUser));
 
+  if (validPIN(newPin) == false) {
+    showErrorPopup('INVALID PIN');
+    return;
+  }
+
   if (newPin != confirmPin) {
-    showErrorPopup('PINS MUST MATCH!');
+    showErrorPopup('PINS MUST MATCH');
     return; 
   }
+
   if (newPin == userInfo[0]) {
     showErrorPopup('PIN CANNOT BE SAME AS PREVIOUS');
     return; 
@@ -411,6 +418,16 @@ function changePIN() {
   localStorage.setItem(currentUser, JSON.stringify(userInfo));
 }
 
+ function validPIN(str) {
+  nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  valid = true;
+
+  if (str.length != 4) { valid = false; }
+
+  str.split('').forEach(item => { if (!nums.includes(item)) { valid = false; } });
+  
+  return valid;
+}
 
 // Updates the current time every minutes
 showTime()
@@ -421,10 +438,15 @@ function showTime() {
   hours = formatTime(time.getHours());
   minutes = formatTime(time.getMinutes());
   seconds = formatTime(time.getSeconds());
-  days = formatTime(time.getDate());
-  months = formatTime(time.getMonth() + 1);
-  fullTime = `${hours}:${minutes}:${seconds} ${days}/${months}/${time.getFullYear()}`;
+
+  fullTime = `${hours}:${minutes}:${seconds} ${getDate()}`;
   document.querySelector('#current-time').textContent = fullTime;
+}
+
+function getDate() {
+  let time = new Date;
+
+  return `${formatTime(time.getDate())}/${formatTime(time.getMonth() + 1)}/${time.getFullYear()}`
 }
 
 // Formats time so that it has a 0 in front of it if its single digit
